@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 const Router = () => {
   return (
     <Stack.Navigator
-      initialRouteName="home"
+      initialRouteName="probs"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="home" component={Home} />

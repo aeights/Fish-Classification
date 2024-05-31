@@ -1,20 +1,28 @@
 import {
   View,
   Text,
-  Touchable,
-  TouchableOpacity,
   StyleSheet,
   ScrollView,
 } from "react-native";
-import React from "react";
-import {
-  MaterialCommunityIcons,
-  MaterialIcons,
-  AntDesign,
-} from "@expo/vector-icons";
-import { primary, secondary, third } from "../../components/color/Index";
+import React, { useEffect, useState } from "react";
+import { primary, secondary, third, fourth } from "../../components/color/Index";
+import { useNavigation } from "@react-navigation/native";
+import ButtonMain from "../../components/button/ButtonComponent";
+import ProgressBar from "../../components/utils/ProgressBarComponent";
 
-const Probs = () => {
+const Probs = ({ }) => {
+  const navigation = useNavigation();
+
+  const [result, setResult] = useState({});
+
+  const data = [
+    { 'name': 'Mosquito Fish', 'probs': 0.48 },
+    { 'name': 'Mudfish', 'probs': 0.16 },
+    {'name': 'Black Spotted Barb', 'probs': 0.12},
+    { 'name': 'Grass Carp', 'probs': 0.08 },
+    { 'name': 'Long-Snouted Pipefish', 'probs': 0.06 }
+  ]
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -34,7 +42,7 @@ const Probs = () => {
       {/* Priview Image */}
       <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
         <View style={styles.boxPreview}>
-          <Text style={{ color: "#fff", fontSize: 14 }}>Preview Image</Text>
+          <Text style={{ color: fourth, fontSize: 14 }}>Preview Image</Text>
         </View>
       </View>
       {/* Text Fish Name */}
@@ -42,7 +50,7 @@ const Probs = () => {
         style={{
           textAlign: "center",
           marginVertical: 30,
-          color: "#fff",
+          color: fourth,
           fontSize: 16,
         }}
       >
@@ -52,7 +60,7 @@ const Probs = () => {
       <Text
         style={{
           marginHorizontal: 20,
-          color: "#fff",
+          color: fourth,
           fontSize: 20,
           fontWeight: "700",
           letterSpacing: 1,
@@ -60,17 +68,19 @@ const Probs = () => {
       >
         Classification Details
       </Text>
-      <View></View>
-      {/* Button Start Classify */}
-      <View style={{ marginTop: 50, paddingHorizontal: 20 }}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("probs")}
-          style={styles.btnTry}
-        >
-          <AntDesign name="rocket1" size={35} color="white" />
-          <Text style={{ color: "#fff", fontSize: 18 }}>Try Another</Text>
-        </TouchableOpacity>
+      <View style={{ 
+        justifyContent: 'center',
+        alignItems: 'center'
+       }}>
+        {
+          data.map((item, index) => {
+            return (
+              <ProgressBar key={index} probs={item.probs} name={item.name}/>
+            )
+          })
+        }
       </View>
+      <ButtonMain icon={"rocket1"} onClick={() => navigation.navigate('home')} text={"Try Another"} />
     </ScrollView>
   );
 };
@@ -90,35 +100,24 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   text1Color: {
-    color: "#fff",
+    color: fourth,
     fontSize: 20,
   },
   headingTitle: {
     fontSize: 26,
     letterSpacing: 1,
-    color: "#fff",
+    color: fourth,
     marginHorizontal: 20,
   },
   boxPreview: {
     width: "100%",
     height: 200,
     backgroundColor: "rgba(255, 255, 255, 0.4)",
-    borderColor: "#fff",
+    borderColor: fourth,
     borderWidth: 2,
     borderRadius: 12,
     marginTop: 15,
     justifyContent: "center",
     alignItems: "center",
-  },
-  btnTry: {
-    width: "auto",
-    backgroundColor: secondary,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 10,
-    paddingHorizontal: 50,
-    paddingVertical: 15,
-    borderRadius: 10,
   },
 });

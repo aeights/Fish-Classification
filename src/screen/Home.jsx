@@ -1,24 +1,21 @@
 import {
   View,
   Text,
-  Touchable,
   TouchableOpacity,
   StyleSheet,
   Image,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import {
   MaterialCommunityIcons,
   MaterialIcons,
-  AntDesign,
 } from "@expo/vector-icons";
-import { primary, secondary, third } from "../../components/color/Index";
-import { FullWindowOverlay } from "react-native-screens";
-import { useNavigation } from "@react-navigation/native";
+import { primary, secondary, third, fourth } from "../../components/color/Index";
 import * as ImagePicker from "expo-image-picker";
+import ButtonMain from "../../components/button/ButtonComponent";
 
 const Home = () => {
-  const navigation = useNavigation();
   const [isGallery, setIsGallery] = useState(null);
   const [image, setImage] = useState(null);
 
@@ -37,75 +34,71 @@ const Home = () => {
     console.log(image);
   };
 
+  const predict = () => {
+    console.log("anjay");
+  }
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View
-          style={{
-            marginHorizontal: 20,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Text style={styles.text1Color}>Fish Classification</Text>
-          <TouchableOpacity>
-            <MaterialCommunityIcons name="history" size={30} color="white" />
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View
+            style={{
+              marginHorizontal: 20,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text style={styles.text1Color}>Fish Classification</Text>
+            <TouchableOpacity>
+              <MaterialCommunityIcons name="history" size={30} color="white" />
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* tagline */}
+        <Text style={styles.headingTitle}>
+          What do you want to look{"\n"}for today?
+        </Text>
+        {/* box */}
+        <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
+          <View style={styles.box}>
+            <Text></Text>
+          </View>
+        </View>
+        {/* tagline start*/}
+        <View style={{ alignItems: "center", marginVertical: 40 }}>
+          <Text style={styles.textStart}>Start Trying</Text>
+        </View>
+        {/* Select Image */}
+        <View style={{ alignItems: "center" }}>
+          <TouchableOpacity style={styles.btnImage} onPress={pickImage}>
+            <MaterialIcons name="add-photo-alternate" size={30} color={primary} />
+            <Text style={{ color: primary, fontSize: 18 }}>Select Image</Text>
           </TouchableOpacity>
         </View>
-      </View>
-      {/* tagline */}
-      <Text style={styles.headingTitle}>
-        What do you want to look{"\n"}for today?
-      </Text>
-      {/* box */}
-      <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
-        <View style={styles.box}>
-          <Text></Text>
+        {/* Priview Image */}
+        <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
+          <View style={styles.boxPreview}>
+            {image ? (
+              <Image
+                source={{ uri: image }}
+                style={{
+                  width: "100%",
+                  height: 196,
+                  borderRadius: 10,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              />
+            ) : (
+              <Text style={{ color: fourth, fontSize: 14 }}>Preview Image</Text>
+            )}
+          </View>
         </View>
+        <ButtonMain icon={"rocket1"} onClick={predict} text={"Start Classify"} />
       </View>
-      {/* tagline start*/}
-      <View style={{ alignItems: "center", marginVertical: 40 }}>
-        <Text style={styles.textStart}>Start Trying</Text>
-      </View>
-      {/* Select Image */}
-      <View style={{ alignItems: "center" }}>
-        <TouchableOpacity style={styles.btnImage} onPress={pickImage}>
-          <MaterialIcons name="add-photo-alternate" size={30} color={primary} />
-          <Text style={{ color: primary, fontSize: 18 }}>Select Image</Text>
-        </TouchableOpacity>
-      </View>
-      {/* Priview Image */}
-      <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
-        <View style={styles.boxPreview}>
-          {image ? (
-            <Image
-              source={{ uri: image }}
-              style={{
-                width: "100%",
-                height: 196,
-                borderRadius: 10,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            />
-          ) : (
-            <Text style={{ color: "#fff", fontSize: 14 }}>Preview Image</Text>
-          )}
-        </View>
-      </View>
-
-      {/* Button Start Classify */}
-      <View style={{ marginTop: 50, paddingHorizontal: 20 }}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("probs")}
-          style={styles.btnClassify}
-        >
-          <AntDesign name="rocket1" size={35} color="white" />
-          <Text style={{ color: "#fff", fontSize: 18 }}>Start Classify</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -124,32 +117,32 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   text1Color: {
-    color: "#fff",
+    color: fourth,
     fontSize: 20,
   },
   headingTitle: {
     fontSize: 26,
     letterSpacing: 1,
-    color: "#fff",
+    color: fourth,
     marginHorizontal: 20,
   },
   box: {
     width: "100%",
     height: 130,
-    backgroundColor: "#fff",
+    backgroundColor: fourth,
     borderColor: third,
     borderWidth: 5,
     borderRadius: 12,
     marginTop: 20,
   },
   textStart: {
-    color: "#fff",
+    color: fourth,
     fontSize: 20,
     fontWeight: "700",
   },
   btnImage: {
     width: "auto",
-    backgroundColor: "#fff",
+    backgroundColor: fourth,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
@@ -162,22 +155,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     backgroundColor: "rgba(255, 255, 255, 0.4)",
-    borderColor: "#fff",
+    borderColor: fourth,
     borderWidth: 2,
     borderRadius: 12,
     marginTop: 30,
     justifyContent: "center",
     alignItems: "center",
-  },
-  btnClassify: {
-    width: "auto",
-    backgroundColor: secondary,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 10,
-    paddingHorizontal: 50,
-    paddingVertical: 15,
-    borderRadius: 10,
   },
 });
