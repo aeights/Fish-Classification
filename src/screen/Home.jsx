@@ -4,6 +4,7 @@ import {
   Touchable,
   TouchableOpacity,
   StyleSheet,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import {
@@ -14,11 +15,27 @@ import {
 import { primary, secondary, third } from "../../components/color/Index";
 import { FullWindowOverlay } from "react-native-screens";
 import { useNavigation } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
 
 const Home = () => {
   const navigation = useNavigation();
   const [isGallery, setIsGallery] = useState(null);
   const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+
+    console.log(image);
+  };
 
   return (
     <View style={styles.container}>
@@ -51,8 +68,9 @@ const Home = () => {
       <View style={{ alignItems: "center", marginVertical: 40 }}>
         <Text style={styles.textStart}>Start Trying</Text>
       </View>
+      {/* Select Image */}
       <View style={{ alignItems: "center" }}>
-        <TouchableOpacity style={styles.btnImage}>
+        <TouchableOpacity style={styles.btnImage} onPress={pickImage}>
           <MaterialIcons name="add-photo-alternate" size={30} color={primary} />
           <Text style={{ color: primary, fontSize: 18 }}>Select Image</Text>
         </TouchableOpacity>
@@ -60,7 +78,20 @@ const Home = () => {
       {/* Priview Image */}
       <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
         <View style={styles.boxPreview}>
-          <Text style={{ color: "#fff", fontSize: 14 }}>Preview Image</Text>
+          {image ? (
+            <Image
+              source={{ uri: image }}
+              style={{
+                width: "100%",
+                height: 196,
+                borderRadius: 10,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            />
+          ) : (
+            <Text style={{ color: "#fff", fontSize: 14 }}>Preview Image</Text>
+          )}
         </View>
       </View>
 
