@@ -6,12 +6,14 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import {
-  MaterialCommunityIcons,
-  MaterialIcons,
-} from "@expo/vector-icons";
-import { primary, secondary, third, fourth } from "../../components/color/Index";
+  primary,
+  secondary,
+  third,
+  fourth,
+} from "../../components/color/Index";
 import * as ImagePicker from "expo-image-picker";
 import ButtonMain from "../../components/button/ButtonComponent";
 
@@ -30,13 +32,17 @@ const Home = () => {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
-
-    console.log(image);
   };
 
   const predict = () => {
     console.log("anjay");
-  }
+  };
+
+  useEffect(() => {
+    if (image !== null) {
+      console.log(image);
+    }
+  }, [image]);
 
   return (
     <ScrollView>
@@ -73,7 +79,11 @@ const Home = () => {
         {/* Select Image */}
         <View style={{ alignItems: "center" }}>
           <TouchableOpacity style={styles.btnImage} onPress={pickImage}>
-            <MaterialIcons name="add-photo-alternate" size={30} color={primary} />
+            <MaterialIcons
+              name="add-photo-alternate"
+              size={30}
+              color={primary}
+            />
             <Text style={{ color: primary, fontSize: 18 }}>Select Image</Text>
           </TouchableOpacity>
         </View>
@@ -96,7 +106,11 @@ const Home = () => {
             )}
           </View>
         </View>
-        <ButtonMain icon={"rocket1"} onClick={predict} text={"Start Classify"} />
+        <ButtonMain
+          icon={"rocket1"}
+          onClick={predict}
+          text={"Start Classify"}
+        />
       </View>
     </ScrollView>
   );
