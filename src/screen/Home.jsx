@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -16,6 +17,7 @@ import {
 } from "../../components/color/Index";
 import * as ImagePicker from "expo-image-picker";
 import ButtonMain from "../../components/button/ButtonComponent";
+import axios from "axios";
 
 const Home = () => {
   const [isGallery, setIsGallery] = useState(null);
@@ -34,19 +36,42 @@ const Home = () => {
     }
   };
 
-  const predict = () => {
-    console.log("anjay");
+  // const predict = async () => {
+  //   console.log(image);
+  //   const res = await fetch("http://127.0.0.1:5000/predict", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //     },
+  //     body: {
+  //       image: image,
+  //     },
+  //   });
+  //   console.log(res.data);
+  // };
+
+  const predict = async () => {
+    console.log(image);
+    const res = await axios.post("http://127.0.0.1:5000/predict", {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      data: {
+        image: image,
+      },
+    });
+    console.log(res.data);
   };
 
-  useEffect(() => {
-    if (image !== null) {
-      console.log(image);
-    }
-  }, [image]);
+  // useEffect(() => {
+  //   if (image !== null) {
+  //     console.log(image);
+  //   }
+  // }, [image]);
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <ScrollView style={styles.container}>
+      <SafeAreaView>
         <View style={styles.header}>
           <View
             style={{
@@ -111,7 +136,7 @@ const Home = () => {
           onClick={predict}
           text={"Start Classify"}
         />
-      </View>
+      </SafeAreaView>
     </ScrollView>
   );
 };
