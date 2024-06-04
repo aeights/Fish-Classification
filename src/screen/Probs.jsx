@@ -3,25 +3,46 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { primary, secondary, third, fourth } from "../../components/color/Index";
 import { useNavigation } from "@react-navigation/native";
 import ButtonMain from "../../components/button/ButtonComponent";
 import ProgressBar from "../../components/utils/ProgressBarComponent";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import backendUrl from "../../api/config";
 
 const Probs = ({ }) => {
   const navigation = useNavigation();
+  const [imagePath, setImagePath] = useState(null);
+  const [result, setResult] = useState([]);
 
-  const [result, setResult] = useState({});
+  const getResult = async () => {
+    const result = await AsyncStorage.getItem('result');
+    const data = JSON.parse(result);
+    setImagePath(`${backendUrl}/results/${data.image_path}`);
+    setResult(data.predictions);
+    // AsyncStorage.removeItem('result');
+  }
+
+  const backToHome = () => {
+    AsyncStorage.removeItem('result');
+    navigation.navigate('home');
+  } 
 
   const data = [
     { 'name': 'Mosquito Fish', 'probs': 0.48 },
     { 'name': 'Mudfish', 'probs': 0.16 },
-    {'name': 'Black Spotted Barb', 'probs': 0.12},
+    { 'name': 'Black Spotted Barb', 'probs': 0.12 },
     { 'name': 'Grass Carp', 'probs': 0.08 },
     { 'name': 'Long-Snouted Pipefish', 'probs': 0.06 }
-  ]
+  ];
+
+  useEffect(() => {
+    getResult()
+  },[])
 
   return (
     <ScrollView style={styles.container}>
@@ -42,7 +63,20 @@ const Probs = ({ }) => {
       {/* Priview Image */}
       <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
         <View style={styles.boxPreview}>
-          <Text style={{ color: fourth, fontSize: 14 }}>Preview Image</Text>
+          {imagePath ? (
+            <Image
+              source={{ uri: imagePath }}
+              style={{
+                width: "100%",
+                height: 196,
+                borderRadius: 10,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            />
+          ) : (
+            <Text style={{ color: fourth, fontSize: 14 }}>Preview Image</Text>
+          )}
         </View>
       </View>
       {/* Text Fish Name */}
@@ -68,19 +102,19 @@ const Probs = ({ }) => {
       >
         Classification Details
       </Text>
-      <View style={{ 
+      <View style={{
         justifyContent: 'center',
         alignItems: 'center'
-       }}>
+      }}>
         {
-          data.map((item, index) => {
+          result.map((item, index) => {
             return (
-              <ProgressBar key={index} probs={item.probs} name={item.name}/>
+              <ProgressBar key={index} probs={item.probability} name={item.label} />
             )
           })
         }
       </View>
-      <ButtonMain icon={"rocket1"} onClick={() => navigation.navigate('home')} text={"Try Another"} />
+      <ButtonMain icon={"rocket1"} onClick={backToHome} text={"Try Another"} />
     </ScrollView>
   );
 };

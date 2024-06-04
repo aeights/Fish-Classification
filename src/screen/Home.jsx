@@ -18,8 +18,12 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import ButtonMain from "../../components/button/ButtonComponent";
 import axios from "axios";
+import backendUrl from "../../api/config";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Home = () => {
+  const navigation = useNavigation();
   const [isGallery, setIsGallery] = useState(null);
   const [image, setImage] = useState(null);
 
@@ -36,38 +40,27 @@ const Home = () => {
     }
   };
 
-  // const predict = async () => {
-  //   console.log(image);
-  //   const res = await fetch("http://127.0.0.1:5000/predict", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "multipart/form-data",
-  //     },
-  //     body: {
-  //       image: image,
-  //     },
-  //   });
-  //   console.log(res.data);
-  // };
-
   const predict = async () => {
-    console.log(image);
-    const res = await axios.post("http://127.0.0.1:5000/predict", {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      data: {
-        image: image,
-      },
-    });
-    console.log(res.data);
-  };
+    try {
+      const formData = new FormData();
+      formData.append('image', {
+        uri: image,
+        name: 'photo.jpg',
+        type: 'image/jpeg',
+      });
 
-  // useEffect(() => {
-  //   if (image !== null) {
-  //     console.log(image);
-  //   }
-  // }, [image]);
+      const res = await axios.post(`${backendUrl}/predict`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(res.data);
+      AsyncStorage.setItem('result', JSON.stringify(res.data))
+      navigation.navigate("probs")
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
