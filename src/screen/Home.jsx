@@ -22,6 +22,9 @@ import backendUrl from "../../api/config";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const underWater = require("../../assets/underwater.jpg");
+// const bg = require("../../assets/bg.jpg");
+
 const Home = () => {
   const navigation = useNavigation();
   const [isGallery, setIsGallery] = useState(null);
@@ -31,7 +34,6 @@ const Home = () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
     });
 
@@ -43,20 +45,20 @@ const Home = () => {
   const predict = async () => {
     try {
       const formData = new FormData();
-      formData.append('image', {
+      formData.append("image", {
         uri: image,
-        name: 'photo.jpg',
-        type: 'image/jpeg',
+        name: "photo.jpg",
+        type: "image/jpeg",
       });
 
       const res = await axios.post(`${backendUrl}/predict`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
       console.log(res.data);
-      AsyncStorage.setItem('result', JSON.stringify(res.data))
-      navigation.navigate("probs")
+      AsyncStorage.setItem("result", JSON.stringify(res.data));
+      navigation.navigate("probs");
     } catch (error) {
       console.error(error);
     }
@@ -65,6 +67,9 @@ const Home = () => {
   return (
     <ScrollView style={styles.container}>
       <SafeAreaView>
+        {/* <View>
+          <Image source={bg} style={styles.bg} />
+        </View> */}
         <View style={styles.header}>
           <View
             style={{
@@ -85,9 +90,24 @@ const Home = () => {
           What do you want to look{"\n"}for today?
         </Text>
         {/* box */}
-        <View style={{ alignItems: "center", paddingHorizontal: 20 }}>
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            paddingHorizontal: 20,
+          }}
+        >
           <View style={styles.box}>
-            <Text></Text>
+            <Image
+              source={underWater}
+              style={{
+                width: "100%",
+                height: 121,
+                borderRadius: 8,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            />
           </View>
         </View>
         {/* tagline start*/}
@@ -194,4 +214,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  // bg: {
+  //   position: "absolute",
+  //   opacity: 0.1,
+  // },
 });

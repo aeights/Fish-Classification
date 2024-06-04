@@ -1,2 +1,2 @@
-const backendUrl = "http://192.168.1.8:8000";
+const backendUrl = "http://192.168.18.40:8080";
 export default backendUrl;
