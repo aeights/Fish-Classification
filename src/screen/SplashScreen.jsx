@@ -1,51 +1,47 @@
 import { Animated, Image, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StackActions } from "@react-navigation/native";
-import TypeWriter from "react-native-typewriter";
 import { useFonts } from "expo-font";
 import { primary, secondary, third } from "../../components/color/Index";
-import { LinearGradient } from "expo-linear-gradient";
 
-const image = require("../../assets/Logo Fish 1.png");
-const image2 = require("../../assets/Logo Fish 2.png");
-const image3 = require("../../assets/Logo Fish 3.png");
-const image4 = require("../../assets/Logo Fish 4.png");
+const eye = "#00B1EF";
+
+const imageDifficult = require("../../assets/Fish Screen.png");
+const logoDefault = require("../../assets/logo-default.png");
+
 const SplashScreen = ({ navigation }) => {
-  const [loaded] = useFonts({
-    "Permanent-Marker": require("../../assets/fonts/PermanentMarker-Regular.ttf"),
-  });
-
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.5)).current;
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 1000,
+      duration: 3000,
       useNativeDriver: true,
-    }).start();
+    }).start(() => {
+      Animated.timing(scaleAnim, {
+        toValue: 500,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+    });
     const time = setTimeout(() => {
       navigation.dispatch(StackActions.replace("onboarding"));
-    }, 3000);
-  }, [fadeAnim]);
-
-  if (!loaded) {
-    return null;
-  }
+    }, 4000);
+  }, [fadeAnim, scaleAnim]);
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        style={styles.background}
-        colors={[primary, third, "#fff"]}
-      ></LinearGradient>
       <Animated.Image
         style={[styles.image, { opacity: fadeAnim }]}
-        source={image3}
+        source={logoDefault}
       />
-      {/* <Text style={styles.typing}> Fish Classification </Text> */}
-      <TypeWriter style={styles.typing} maxdelay={300} minDelay={50} typing={1}>
-        FISH CLASSIFICATION
-      </TypeWriter>
+      <Animated.View
+        style={[
+          styles.eye,
+          { opacity: fadeAnim, transform: [{ scale: scaleAnim }] },
+        ]}
+      ></Animated.View>
     </View>
   );
 };
@@ -57,21 +53,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  background: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
+    backgroundColor: primary,
   },
   image: {
     width: 200,
     height: 200,
   },
-  typing: {
-    fontFamily: "Permanent-Marker",
-    fontSize: 24,
-    color: "white",
+  eye: {
+    width: 5,
+    height: 5,
+    backgroundColor: "#fff",
+    borderRadius: 100,
+    position: "absolute",
+    right: 160,
+    bottom: 430,
   },
 });
