@@ -6,7 +6,6 @@ import { primary, secondary, third } from "../../components/color/Index";
 
 const eye = "#00B1EF";
 
-const underWater = require("../../assets/underwater.jpg");
 const imageDifficult = require("../../assets/Fish Screen.png");
 const logoDefault = require("../../assets/logo-default.png");
 

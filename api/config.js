@@ -1,2 +1,2 @@
-const backendUrl = "http://192.168.18.40:8080";
+const backendUrl = "https://daring-civil-fox.ngrok-free.app";
 export default backendUrl;

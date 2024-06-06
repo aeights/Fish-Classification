@@ -4,7 +4,7 @@
     "slug": "Fish-Classification",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-fish.png",
     "userInterfaceStyle": "light",
     "plugins": [
       [
@@ -15,22 +15,29 @@
       ],
       "expo-font"
     ],
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    // "splash": {
+    //   "image": "./assets/splash.png",
+    //   "resizeMode": "contain",
+    //   "backgroundColor": "#ffffff"
+    // },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/icon-fish.png"
+        // "backgroundColor": "#ffffff"
+      },
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "package": "com.rendyfirmansah.FishClassification"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon-fish.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "94585900-e735-498c-9856-c2102a5a0965"
+      }
     }
   }
 }
