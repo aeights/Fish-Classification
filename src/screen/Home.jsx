@@ -58,6 +58,7 @@ const Home = () => {
       });
       console.log(res.data);
       AsyncStorage.setItem("result", JSON.stringify(res.data));
+      setImage(null);
       navigation.navigate("probs");
     } catch (error) {
       console.error(error);

@@ -1,12 +1,11 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import React, { useEffect, useState } from "react";
-import { primary, secondary, third, fourth } from "../../components/color/Index";
+import {
+  primary,
+  secondary,
+  third,
+  fourth,
+} from "../../components/color/Index";
 import { useNavigation } from "@react-navigation/native";
 import ButtonMain from "../../components/button/ButtonComponent";
 import ProgressBar from "../../components/utils/ProgressBarComponent";
@@ -14,35 +13,36 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import backendUrl from "../../api/config";
 
-const Probs = ({ }) => {
+const Probs = ({}) => {
   const navigation = useNavigation();
   const [imagePath, setImagePath] = useState(null);
   const [result, setResult] = useState([]);
 
   const getResult = async () => {
-    const result = await AsyncStorage.getItem('result');
+    const result = await AsyncStorage.getItem("result");
     const data = JSON.parse(result);
     setImagePath(`${backendUrl}/results/${data.image_path}`);
     setResult(data.predictions);
+    console.log(result);
     // AsyncStorage.removeItem('result');
-  }
+  };
 
   const backToHome = () => {
-    AsyncStorage.removeItem('result');
-    navigation.navigate('home');
-  } 
+    AsyncStorage.removeItem("result");
+    navigation.navigate("home");
+  };
 
   const data = [
-    { 'name': 'Mosquito Fish', 'probs': 0.48 },
-    { 'name': 'Mudfish', 'probs': 0.16 },
-    { 'name': 'Black Spotted Barb', 'probs': 0.12 },
-    { 'name': 'Grass Carp', 'probs': 0.08 },
-    { 'name': 'Long-Snouted Pipefish', 'probs': 0.06 }
+    { name: "Mosquito Fish", probs: 0.48 },
+    { name: "Mudfish", probs: 0.16 },
+    { name: "Black Spotted Barb", probs: 0.12 },
+    { name: "Grass Carp", probs: 0.08 },
+    { name: "Long-Snouted Pipefish", probs: 0.06 },
   ];
 
   useEffect(() => {
-    getResult()
-  },[])
+    getResult();
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
@@ -80,16 +80,20 @@ const Probs = ({ }) => {
         </View>
       </View>
       {/* Text Fish Name */}
-      <Text
-        style={{
-          textAlign: "center",
-          marginVertical: 30,
-          color: fourth,
-          fontSize: 16,
-        }}
-      >
-        Fish Name
-      </Text>
+      {result.length > 0 && result[0].label ? (
+        <Text
+          style={{
+            textAlign: "center",
+            marginVertical: 30,
+            color: fourth,
+            fontSize: 16,
+          }}
+        >
+          {result[0].label}
+        </Text>
+      ) : (
+        <Text></Text>
+      )}
       {/* Classifications Detail */}
       <Text
         style={{
@@ -102,17 +106,27 @@ const Probs = ({ }) => {
       >
         Classification Details
       </Text>
-      <View style={{
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        {
-          result.map((item, index) => {
-            return (
-              <ProgressBar key={index} probs={item.probability} name={item.label} />
-            )
-          })
-        }
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {result.map((item, index) => {
+          return (
+            <ProgressBar
+              key={index}
+              probs={
+                item.probability == 0
+                  ? "0.00"
+                  : item.probability == 1
+                  ? "1.00"
+                  : item.probability
+              }
+              name={item.label}
+            />
+          );
+        })}
       </View>
       <ButtonMain icon={"rocket1"} onClick={backToHome} text={"Try Another"} />
     </ScrollView>
